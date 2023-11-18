@@ -1,0 +1,72 @@
+basePath: /
+definitions:
+  models.LoginInfo:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: rigarayshin@edu.hse.ru
+    name: Robert Garayshin
+  description: This is API documentation for Driveshare platform
+  title: Driveshare API
+  version: 0.0.2
+paths:
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      operationId: signin
+      parameters:
+      - description: query params
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginInfo'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Login endpoint
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      operationId: signup
+      parameters:
+      - description: query params
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Registration endpoint
+      tags:
+      - auth
+swagger: "2.0"
