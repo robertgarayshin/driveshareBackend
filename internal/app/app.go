@@ -9,6 +9,7 @@ import (
 )
 
 func CreateApp() {
+	log.Println("Starting server...")
 	r := mux.NewRouter()
 
 	r.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
@@ -21,5 +22,6 @@ func CreateApp() {
 	r.HandleFunc("/auth/signup", rest.SignupHandler).Methods(http.MethodPost)
 	r.HandleFunc("/auth/signin", rest.SigninHandler)
 
+	log.Println("Server started on :8080")
 	log.Fatal(http.ListenAndServe("localhost:8080", r))
 }

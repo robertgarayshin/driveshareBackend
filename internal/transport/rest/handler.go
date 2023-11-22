@@ -43,10 +43,18 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 //		@Router			/auth/signin [post]
 func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
-	var login models.LoginInfo
-	err := decoder.Decode(&login)
+	var credentials models.LoginInfo
+	err := decoder.Decode(&credentials)
 	if err != nil {
 		return
 	}
-	log.Println(login)
+	// get expected password
+
+	token := service.CreateJwt(credentials, w)
+	tokenString, err := token.SignedString(service.JwtKey)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	log.Println(tokenString)
+	log.Println(w.Write([]byte(tokenString)))
 }

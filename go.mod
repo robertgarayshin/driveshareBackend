@@ -3,6 +3,7 @@ module driveshare_backend
 go 1.19
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.1.0
 	github.com/gorilla/mux v1.8.1
 	github.com/swaggo/http-swagger/v2 v2.0.2
 	github.com/swaggo/swag v1.16.2
