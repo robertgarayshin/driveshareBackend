@@ -5,19 +5,21 @@ import (
 	"driveshare_backend/internal/models"
 	"driveshare_backend/internal/service"
 	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
 // SignupHandler
 //
-//		@Summary		Registration endpoint
-//		@ID				signup
-//	 	@Accept json
-//		@Tags auth
-//		@Param User body models.User true "query params"
-//		@Success		200	{string}	string	"ok"
-//		@Router			/auth/signup [post]
+//	@Summary		Registration endpoint
+//	@ID				signup
+//	@Accept json
+//	@Tags auth
+//	@Param User body models.User true "query params"
+//	@Success		200	{string}	string	"ok"
+//	@Router			/auth/signup [post]
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var user models.User
@@ -34,13 +36,13 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 // SigninHandler
 //
-//		@Summary		Login endpoint
-//		@ID				signin
-//	 	@Accept json
-//		@Tags auth
-//		@Param Login body models.LoginInfo true "query params"
-//		@Success		200	{string}	string	"ok"
-//		@Router			/auth/signin [post]
+//	@Summary		Login endpoint
+//	@ID				signin
+//	@Accept json
+//	@Tags auth
+//	@Param Login body models.LoginInfo true "query params"
+//	@Success		200	{string}	string	"ok"
+//	@Router			/auth/signin [post]
 func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var credentials models.LoginInfo
@@ -48,8 +50,12 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	// get expected password
-
+	user := service.GetProfileByEmail(credentials.Username)
+	// проверить, возможно добавить поле хэша
+	if !service.CheckPasswordHash(credentials.Password, user.Password) {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 	token := service.CreateJwt(credentials, w)
 	tokenString, err := token.SignedString(service.JwtKey)
 	if err != nil {
@@ -57,4 +63,14 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Println(tokenString)
 	log.Println(w.Write([]byte(tokenString)))
+}
+
+func CatalogHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func GetUserByIdHandler(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+	fmt.Println(id)
 }
