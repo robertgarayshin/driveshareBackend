@@ -35,7 +35,7 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	write.CreateUser(user)
-	log.Println(read.DbMock)
+	log.Println(read.UserDbMock)
 }
 
 // SigninHandler

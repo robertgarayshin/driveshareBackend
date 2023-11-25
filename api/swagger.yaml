@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  models.Car:
+    properties:
+      booked:
+        type: boolean
+      brand:
+        type: string
+      id:
+        type: integer
+      model:
+        type: string
+      price:
+        type: integer
+      produced:
+        type: string
+    type: object
   models.LoginInfo:
     properties:
       password:
@@ -105,6 +120,133 @@ paths:
       summary: Registration endpoint
       tags:
       - auth
+  /car:
+    get:
+      operationId: getAllCars
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.Car'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Get all cars
+      tags:
+      - car
+  /car/{id}:
+    delete:
+      operationId: deleteCarById
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Delete car by id
+      tags:
+      - car
+    get:
+      operationId: getCarById
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.Car'
+      security:
+      - ApiKeyAuth: []
+      summary: Get car by id
+      tags:
+      - car
+  /car/available:
+    get:
+      operationId: getAvailableCars
+      responses:
+        "200":
+          description: ok
+          schema:
+            items:
+              $ref: '#/definitions/models.Car'
+            type: array
+      security:
+      - ApiKeyAuth: []
+      summary: Get available cars
+      tags:
+      - car
+  /car/book/{id}:
+    put:
+      operationId: bookCarById
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Book car by id
+      tags:
+      - car
+  /car/cancel/{id}:
+    put:
+      operationId: cancelBooking
+      parameters:
+      - description: Car ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Cancel booking
+      tags:
+      - car
+  /car/new:
+    post:
+      consumes:
+      - application/json
+      operationId: postCar
+      parameters:
+      - description: query params
+        in: body
+        name: Car
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: New car publishing endpoint
+      tags:
+      - car
   /catalog:
     get:
       operationId: catalog
@@ -192,4 +334,10 @@ paths:
       summary: Email Confirmation endpoint
       tags:
       - email
+securityDefinitions:
+  ApiKeyAuth:
+    description: Description for what is this security definition being used
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

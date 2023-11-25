@@ -9,3 +9,8 @@ package api
 
 //	@host		localhost:8080
 //	@BasePath	/
+
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
+//	@description				Description for what is this security definition being used

@@ -15,7 +15,7 @@ type UserRead struct {
 	Surname           string
 }
 
-var DbMock = []UserRead{
+var UserDbMock = []UserRead{
 	{
 		Id:                1,
 		Email:             "rigarayshin@edu.hse.ru",
@@ -46,15 +46,15 @@ var DbMock = []UserRead{
 }
 
 func GetUserById(id int) (models.User, error) {
-	for i := range DbMock {
-		if DbMock[i].Id == id {
+	for i := range UserDbMock {
+		if UserDbMock[i].Id == id {
 			return models.User{
-				Id:                DbMock[i].Id,
-				Email:             DbMock[i].Email,
-				Name:              DbMock[i].Name,
-				Surname:           DbMock[i].Surname,
-				ConfirmationToken: DbMock[i].ConfirmationToken,
-				PasswordHash:      DbMock[i].PasswordHash,
+				Id:                UserDbMock[i].Id,
+				Email:             UserDbMock[i].Email,
+				Name:              UserDbMock[i].Name,
+				Surname:           UserDbMock[i].Surname,
+				ConfirmationToken: UserDbMock[i].ConfirmationToken,
+				PasswordHash:      UserDbMock[i].PasswordHash,
 			}, nil
 		}
 	}
@@ -62,15 +62,15 @@ func GetUserById(id int) (models.User, error) {
 }
 
 func GetUserByEmail(email string) (models.User, error) {
-	for i := range DbMock {
-		if DbMock[i].Email == email {
+	for i := range UserDbMock {
+		if UserDbMock[i].Email == email {
 			return models.User{
-				Id:                DbMock[i].Id,
-				Email:             DbMock[i].Email,
-				Name:              DbMock[i].Name,
-				Surname:           DbMock[i].Surname,
-				ConfirmationToken: DbMock[i].ConfirmationToken,
-				PasswordHash:      DbMock[i].PasswordHash,
+				Id:                UserDbMock[i].Id,
+				Email:             UserDbMock[i].Email,
+				Name:              UserDbMock[i].Name,
+				Surname:           UserDbMock[i].Surname,
+				ConfirmationToken: UserDbMock[i].ConfirmationToken,
+				PasswordHash:      UserDbMock[i].PasswordHash,
 			}, nil
 		}
 	}
@@ -79,14 +79,14 @@ func GetUserByEmail(email string) (models.User, error) {
 
 func GetAllUsers() []models.User {
 	var result []models.User
-	for i := range DbMock {
+	for i := range UserDbMock {
 		result = append(result, models.User{
-			Id:                DbMock[i].Id,
-			Email:             DbMock[i].Email,
-			Name:              DbMock[i].Name,
-			Surname:           DbMock[i].Surname,
-			ConfirmationToken: DbMock[i].ConfirmationToken,
-			PasswordHash:      DbMock[i].PasswordHash,
+			Id:                UserDbMock[i].Id,
+			Email:             UserDbMock[i].Email,
+			Name:              UserDbMock[i].Name,
+			Surname:           UserDbMock[i].Surname,
+			ConfirmationToken: UserDbMock[i].ConfirmationToken,
+			PasswordHash:      UserDbMock[i].PasswordHash,
 		})
 	}
 	return result

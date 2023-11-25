@@ -18,33 +18,33 @@ func CreateUser(user models.User) {
 		Name:              user.Name,
 		Surname:           user.Surname,
 	}
-	read.DbMock = append(read.DbMock, res)
+	read.UserDbMock = append(read.UserDbMock, res)
 }
 
 func ConfirmEmail(id int) {
-	for i := range read.DbMock {
-		if read.DbMock[i].Id == id {
-			read.DbMock[i].IsConfirmed = true
+	for i := range read.UserDbMock {
+		if read.UserDbMock[i].Id == id {
+			read.UserDbMock[i].IsConfirmed = true
 		}
 	}
 }
 
 func EditProfile(id int, user models.User) {
-	for i := range read.DbMock {
-		if read.DbMock[i].Id == id {
-			read.DbMock[i].Name = user.Name
-			read.DbMock[i].Email = user.Email
-			read.DbMock[i].Surname = user.Surname
+	for i := range read.UserDbMock {
+		if read.UserDbMock[i].Id == id {
+			read.UserDbMock[i].Name = user.Name
+			read.UserDbMock[i].Email = user.Email
+			read.UserDbMock[i].Surname = user.Surname
 		}
 	}
 }
 
 func DeleteProfile(id int) {
-	for i := range read.DbMock {
-		if read.DbMock[i].Id == id {
-			read.DbMock[i] = read.DbMock[len(read.DbMock)-1]  // Copy last element to index i.
-			read.DbMock[len(read.DbMock)-1] = read.UserRead{} // Erase last element (write zero value).
-			read.DbMock = read.DbMock[:len(read.DbMock)-1]    // Truncate slice.
+	for i := range read.UserDbMock {
+		if read.UserDbMock[i].Id == id {
+			read.UserDbMock[i] = read.UserDbMock[len(read.UserDbMock)-1] // Copy last element to index i.
+			read.UserDbMock[len(read.UserDbMock)-1] = read.UserRead{}    // Erase last element (write zero value).
+			read.UserDbMock = read.UserDbMock[:len(read.UserDbMock)-1]   // Truncate slice.
 		}
 	}
 }
