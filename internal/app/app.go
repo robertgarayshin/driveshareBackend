@@ -24,6 +24,7 @@ func CreateApp() {
 	r.HandleFunc("/auth/signin", rest.SigninHandler).Methods(http.MethodPost)
 	r.HandleFunc("/catalog", service.VerifyJWT(rest.CatalogHandler)).Methods(http.MethodGet)
 	r.HandleFunc("/user/{id}", service.VerifyJWT(rest.GetUserByIdHandler)).Methods(http.MethodGet)
+	r.HandleFunc("/verify/{id}/token:{token}", rest.EmailConfirmHandler).Methods(http.MethodGet)
 
 	log.Println("Server started on :8080")
 	log.Fatal(http.ListenAndServe("localhost:8080", r))

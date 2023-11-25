@@ -2,12 +2,10 @@ package service
 
 import (
 	"driveshare_backend/internal/models"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"net/http"
 	"time"
 )
-
-var JwtKey = []byte("key")
 
 // https://www.sohamkamani.com/golang/jwt-authentication/
 
@@ -17,19 +15,28 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func CreateJwt(credentials models.LoginInfo, w http.ResponseWriter) *jwt.Token {
-	expirationTime := time.Now().Add(5 * time.Minute)
-	// Create the JWT claims, which includes the username and expiry time
-	claims := &Claims{
-		Id:       1,
-		Username: credentials.Username,
-		RegisteredClaims: jwt.RegisteredClaims{
-			// In JWT, the expiry time is expressed as unix milliseconds
-			ExpiresAt: jwt.NewNumericDate(expirationTime),
+func CreateJwt(credentials models.LoginInfo) string {
+	user, _ := GetProfileByEmail(credentials.Username)
+	mySigningKey := []byte("AllYourBase")
+
+	// Create claims with multiple fields populated
+	claims := Claims{
+		user.Id,
+		user.Email,
+		jwt.RegisteredClaims{
+			// A usual scenario is to set the expiration time relative to the current time
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+			Issuer:    "test",
+			Subject:   "somebody",
+			ID:        "1",
+			Audience:  []string{"somebody_else"},
 		},
 	}
 
-	// Declare the token with the algorithm used for signing, and the claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token
+	ss, err := token.SignedString(mySigningKey)
+	fmt.Println(ss, err)
+	return ss
 }

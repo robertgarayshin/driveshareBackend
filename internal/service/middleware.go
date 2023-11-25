@@ -1,33 +1,26 @@
 package service
 
 import (
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"log"
 	"net/http"
+	"strings"
 )
 
 func VerifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Request)) http.HandlerFunc {
 	return func(writer http.ResponseWriter, request *http.Request) {
-		if request.Header["Token"] != nil {
-			token, err := jwt.Parse(request.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
-				_, ok := token.Method.(*jwt.SigningMethodECDSA)
-				if !ok {
-					writer.WriteHeader(http.StatusUnauthorized)
-					_, err := writer.Write([]byte("You're Unauthorized"))
-					if err != nil {
-						return nil, err
-					}
-				}
-				return "", nil
-
+		if request.Header["Authorization"] != nil {
+			tokenString := strings.Replace(request.Header["Authorization"][0], "Bearer ", "", 1)
+			token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+				return []byte("AllYourBase"), nil
 			})
-			// parsing errors result
 			if err != nil {
-				writer.WriteHeader(http.StatusUnauthorized)
-				_, err2 := writer.Write([]byte("You're Unauthorized due to error parsing the JWT"))
-				if err2 != nil {
-					return
-				}
-
+				log.Fatal(err)
+			} else if claims, ok := token.Claims.(*Claims); ok {
+				fmt.Println(claims.Id, claims.RegisteredClaims.Issuer)
+			} else {
+				log.Fatal("unknown claims type, cannot proceed")
 			}
 			// if there's a token
 			if token.Valid {

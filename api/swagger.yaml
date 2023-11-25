@@ -7,8 +7,20 @@ definitions:
       username:
         type: string
     type: object
+  models.Payload:
+    properties:
+      auth_token:
+        type: string
+      id:
+        type: integer
+      token_type:
+        description: Role string `json:"role"`
+        type: string
+    type: object
   models.User:
     properties:
+      confirmationToken:
+        type: string
       email:
         type: string
       id:
@@ -16,6 +28,8 @@ definitions:
       name:
         type: string
       password:
+        type: string
+      passwordHash:
         type: string
       surname:
         type: string
@@ -45,7 +59,7 @@ paths:
         "200":
           description: ok
           schema:
-            type: string
+            $ref: '#/definitions/models.Payload'
       summary: Login endpoint
       tags:
       - auth
@@ -69,4 +83,76 @@ paths:
       summary: Registration endpoint
       tags:
       - auth
+  /user/{id}:
+    delete:
+      operationId: deleteProfile
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Profile edit endpoint
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      operationId: getById
+      parameters:
+      - description: Account ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Get User Profile by id
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      operationId: editProfile
+      parameters:
+      - description: user profile
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Profile edit endpoint
+      tags:
+      - user
+  /verify/{id}/{token}:
+    get:
+      operationId: confirm
+      parameters:
+      - description: query params
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginInfo'
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Email Confirmation endpoint
+      tags:
+      - email
 swagger: "2.0"
