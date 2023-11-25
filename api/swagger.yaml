@@ -43,6 +43,28 @@ info:
   title: Driveshare API
   version: 0.0.2
 paths:
+  /:
+    get:
+      operationId: home
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Main page handler
+      tags:
+      - pages_demo
+  /about:
+    get:
+      operationId: about
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: About page handler
+      tags:
+      - pages_demo
   /auth/signin:
     post:
       consumes:
@@ -83,6 +105,17 @@ paths:
       summary: Registration endpoint
       tags:
       - auth
+  /catalog:
+    get:
+      operationId: catalog
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: Catalog page handler
+      tags:
+      - pages_demo
   /user/{id}:
     delete:
       operationId: deleteProfile
@@ -141,12 +174,16 @@ paths:
     get:
       operationId: confirm
       parameters:
-      - description: query params
-        in: body
-        name: Login
+      - description: Account ID
+        in: path
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/models.LoginInfo'
+        type: integer
+      - description: Token String
+        in: path
+        name: token
+        required: true
+        type: string
       responses:
         "200":
           description: ok

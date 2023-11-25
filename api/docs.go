@@ -18,6 +18,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "pages_demo"
+                ],
+                "summary": "Main page handler",
+                "operationId": "home",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/about": {
+            "get": {
+                "tags": [
+                    "pages_demo"
+                ],
+                "summary": "About page handler",
+                "operationId": "about",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/signin": {
             "post": {
                 "consumes": [
@@ -70,6 +104,23 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/catalog": {
+            "get": {
+                "tags": [
+                    "pages_demo"
+                ],
+                "summary": "Catalog page handler",
+                "operationId": "catalog",
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -171,13 +222,18 @@ const docTemplate = `{
                 "operationId": "confirm",
                 "parameters": [
                     {
-                        "description": "query params",
-                        "name": "Login",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.LoginInfo"
-                        }
+                        "type": "integer",
+                        "description": "Account ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Token String",
+                        "name": "token",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

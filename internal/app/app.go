@@ -20,9 +20,14 @@ func CreateApp() {
 		httpSwagger.DomID("swagger-ui"),
 	)).Methods(http.MethodGet)
 
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("../../internal/static"))))
+	r.HandleFunc("/", rest.HomeHandler)
+	r.HandleFunc("/catalog", rest.CatalogHandler)
+	r.HandleFunc("/about", rest.AboutHandler)
+
 	r.HandleFunc("/auth/signup", rest.SignupHandler).Methods(http.MethodPost)
 	r.HandleFunc("/auth/signin", rest.SigninHandler).Methods(http.MethodPost)
-	r.HandleFunc("/catalog", service.VerifyJWT(rest.CatalogHandler)).Methods(http.MethodGet)
+
 	r.HandleFunc("/user/{id}", service.VerifyJWT(rest.GetUserByIdHandler)).Methods(http.MethodGet)
 	r.HandleFunc("/verify/{id}/token:{token}", rest.EmailConfirmHandler).Methods(http.MethodGet)
 
